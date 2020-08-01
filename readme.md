@@ -1,6 +1,6 @@
 # Witchcraft & Wizzardry Quidditch Simulator
 
-A Quidditch game Simulator based on Wackstevens [Witchcraft and Wizzardry](tablestory.tv/waw) System:
+A Quidditch game simulator based on Wackstevens [Witchcraft and Wizzardry](tablestory.tv/waw) System:
 
 ## Table of Contents
 
@@ -11,7 +11,7 @@ A Quidditch game Simulator based on Wackstevens [Witchcraft and Wizzardry](table
 
 ## Installation
 
-clone repository into local working directory
+Clone repository into local working directory
 
 ## Usage
 
@@ -19,7 +19,7 @@ clone repository into local working directory
 
 create a Match json file containing two team jsons as a list
 
-+ create and open a new .json file
++ Create and open a new .json file
 + Add two teams (see Example_team.json) into the file in list format
 ```json
 [{Name: "TeamName", ...}, {Name: "Teamname", ...}]
@@ -33,17 +33,17 @@ create a Match json file containing two team jsons as a list
     ```cmd
     python -m quidditch.py --team-file Path/to/file/[filename].json
     ```
-    + if you want to simulate weather effects add
+    + If you want to simulate weather effects add
         ```
         --use_weather
         ```
 
-    + if you want to simulate weather effects add
+    + If you want to simulate weather effects add
         ```
         --use_weather
         ```
         
-    + to return a more in depth game log add
+    + To return a more in depth game log add
         ```
         --collect-metadata
         ```
@@ -76,15 +76,15 @@ create a Match json file containing two team jsons as a list
 
 ## ToDo
 
-+ way to simulate seasons/leagues
++ Simulate seasons/leagues
 
-+ web interface to create/maintain quidditch teams
++ Web interface to create/maintain quidditch teams
 
-+ verbose gamelogs to get a condenced game review
++ Verbose gamelogs to get a condenced game review
 
-+ analyze Game/ season outcomes
++ Analyze Game/ season outcomes
 
-+ add house rules
++ Add house rules
 
 ## Credits
 
