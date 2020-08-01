@@ -69,6 +69,15 @@ create a Match json file containing two team jsons as a list
         + Default: False
 
 
+## ToDo
+
++ way to simulate seasons/leagues
+
++ web interface to create/maintain quidditch teams
+
++ verbose gamelogs to get a condenced game review
+
++ analyze Game/ season outcomes
 
 ## Credits
 
