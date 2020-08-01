@@ -42,7 +42,7 @@ create a Match json file containing two team jsons as a list
         ```
         --use_weather
         ```
-    
+        
     + to return a more in depth game log add
         ```
         --collect-metadata
