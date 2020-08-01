@@ -79,6 +79,8 @@ create a Match json file containing two team jsons as a list
 
 + analyze Game/ season outcomes
 
++ add house rules
+
 ## Credits
 
 ### Thank you to
