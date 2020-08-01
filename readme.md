@@ -24,6 +24,9 @@ create a Match json file containing two team jsons as a list
 ```json
 [{Name: "TeamName", ...}, {Name: "Teamname", ...}]
 ```
+Optionally:
+    + add bonuses/pentalties modifyer to each players base value
+    + add Player Names for each player
 
 ### Command line
 
