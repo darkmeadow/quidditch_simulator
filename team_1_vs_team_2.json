@@ -1,0 +1,86 @@
+[
+    {
+        "Name": "Team_1",
+        "Beater": [
+            {
+                "base": 0,
+                "mod":0,
+                "temp": 0
+            },
+            {
+                "base": 0,
+                "mod":0,
+                "temp": 0
+            }
+        ],
+        "Chaser": [
+            {
+                "base": 0,
+                "mod":0,
+                "temp": 0},
+            {
+                "base": 0,
+                "mod":0,
+                "temp": 0
+            },
+            {
+                "base": 0,
+                "mod":0,
+                "temp": 0
+            }
+        ],
+        "Keeper": {
+            "base": 0,
+            "mod":0,
+            "temp": 0
+        },
+        "Seeker": {
+            "base": 0,
+            "mod":0,
+            "streak" : 0,
+            "temp": 0
+        }
+    },
+    {
+        "Name": "Team_1",
+        "Beater": [
+            {
+                "base": 0,
+                "mod":0,
+                "temp": 0
+            },
+            {
+                "base": 0,
+                "mod":0,
+                "temp": 0
+            }
+        ],
+        "Chaser": [
+            {
+                "base": 0,
+                "mod":0,
+                "temp": 0},
+            {
+                "base": 0,
+                "mod":0,
+                "temp": 0
+            },
+            {
+                "base": 0,
+                "mod":0,
+                "temp": 0
+            }
+        ],
+        "Keeper": {
+            "base": 0,
+            "mod":0,
+            "temp": 0
+        },
+        "Seeker": {
+            "base": 0,
+            "mod":0,
+            "streak": 0,
+            "temp": 0
+        }
+    }
+]

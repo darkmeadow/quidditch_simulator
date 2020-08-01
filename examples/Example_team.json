@@ -1,0 +1,49 @@
+{
+    "Name": "Team_1",
+    "Beater": [
+        {
+            "Name": "Beater 1",
+            "base": 0,
+            "mod":0,
+            "temp": 0
+        },
+        {
+            "Name": "Beater 2",
+            "base": 0,
+            "mod":0,
+            "temp": 0
+        }
+    ],
+    "Chaser": [
+        {
+            "Name": "Chaser 1",
+            "base": 0,
+            "mod":0,
+            "temp": 0},
+        {
+            "Name": "Chaser 2",
+            "base": 0,
+            "mod":0,
+            "temp": 0
+        },
+        {
+            "Name": "Chaser 3",
+            "base": 0,
+            "mod":0,
+            "temp": 0
+        }
+    ],
+    "Keeper": {
+        "Name": "Keeper",
+        "base": 0,
+        "mod":0,
+        "temp": 0
+    },
+    "Seeker": {
+        "Name": "Seeker",
+        "base": 0,
+        "mod":0,
+        "streak" : 0,
+        "temp": 0
+    }
+}
