@@ -2,9 +2,14 @@
 
 A Quidditch game Simulator based on Wackstevens [Witchcraft and Wizzardry](tablestory.tv/waw) System:
 
+## Table of Contents
 
+- [Installation](#installation)
+- [Usage](#usage)
+- [ToDo](#todo)
+- [Credits](#credits)
 
-## installation
+## Installation
 
 clone repository into local working directory
 
