@@ -12,7 +12,7 @@ A Player object contains all nessesary values for the simulation in addition a o
 
 + a Json Object for all players should contain:
 
-    ```json
+    ```
     {
         "base": 0, // Base atribute relevant to the role ranges from -2 to +3
         "mod":0, // Long term non weather modifyer (Injuries and other Conditions)
@@ -22,7 +22,7 @@ A Player object contains all nessesary values for the simulation in addition a o
 
 + Seeker Character jsons also have to include a streak attribute
 
-    ```json
+    ```
     {
         "base": 0, // Base atribute relevant to the role ranges from -2 to +3
         "mod": 0, // Long term non weather modifyer (Injuries and other Conditions)
@@ -47,7 +47,7 @@ A Player object contains all nessesary values for the simulation in addition a o
 
 The Team object contains all player Objects needed for a simulation
 
-```json
+```
  {
     "Name": "SomeName", // Team name is nessesary
     "Beater": [{...}],  // List with at least one player object
@@ -65,7 +65,7 @@ Multiple Beater and Chaser player objects are optional
 
 The match object is a simple Json object list containing 2 Team objects
 
-```json
+```
 [
     {
         "Name": "SomeName",
