@@ -11,7 +11,7 @@ A Quidditch game simulator based on Wackstevens [Witchcraft and Wizzardry](http:
 
 ## Installation
 
-Clone repository into local working directory
+Clone repository or download files into local working directory.
 
 ## Usage
 
@@ -20,7 +20,7 @@ Clone repository into local working directory
 create a Match json file containing two team jsons as a list
 
 + Create and open a new .json file
-+ Add two teams (see Example_team.json) into the file in list format
++ Add two teams (see [Example_team.json](/examples/Example_team.json) into the file in list format
 ```json
 [{Name: "TeamName", ...}, {Name: "Teamname", ...}]
 ```
@@ -29,6 +29,8 @@ Optionally:
 + add bonuses/pentalties modifyer to each players base value
 
 + add Player Names for each player
+
+for in full Datatype explanations got to [examples](/examples/Readme.md)
 
 ### Command line
 
