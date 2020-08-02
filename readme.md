@@ -62,7 +62,7 @@ Optionally:
     ```python
     load_teams(Path/to/file/[filename].json)
     ```
-3. Invoke add_gamelog_level() to add the custom [loglevel](https://docs.python.org/3/library/logging.html#logging-levels) (GAMESTEP: 15)
+3. Invoke quidditch.__init__() to add the custom [loglevel](https://docs.python.org/3/library/logging.html#logging-levels) (GAMESTEP: 15)
     + you have to invoke the function even if you want to ignore gamestep messages
 
 4. Invoke run_game() with the wanted parameter to start the simulation
