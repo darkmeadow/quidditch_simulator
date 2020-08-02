@@ -10,8 +10,50 @@ logger.setLevel(logging.INFO)
 parser = argparse.ArgumentParser(description="Run a game of quidditch,")
 parser.add_argument('--team-file', required=True, type=str, help="File location and name containing a 2 element list of team collections")
 parser.add_argument("--duplicate-roles", action="store_true", help="set to alternate between multiple members of the team if applicable ")
-parser.add_argument("--weather", action="store_true", help="set to include Weather modifyer for the game")
+parser.add_argument("--use-weather", action="store_true", help="set to include Weather modifyer for the game")
 parser.add_argument("--collect-metadata", action="store_true", help="set collect Game Metadata")
+
+def __init__():
+    logging.addLevelName(15, "GAMESTEP")
+    logging.Logger.gamestep = gamestep
+
+
+def load_teams(filename):
+    """
+    Loads a Match json file containing two teams
+    
+    Parameters
+    ----------
+    filename : str
+        Filepath and name to location
+    
+    Returns
+    ----------
+    List
+        List of two Team data objects
+    """
+    teams = {}
+    with open(filename,mode="r") as lfile:
+            teams = json.load(lfile)
+    return teams
+
+
+def gamestep(self, message, *args, **kws):
+    """
+    enables logging for gamestep level
+    
+    Parameters
+    ----------
+    self
+    message: string
+        Message sent at log level
+    *args
+    **kws
+    """
+    if self.isEnabledFor(15):
+        # Yes, logger takes its '*args' as 'args'.
+        self._log(15, message, args, **kws) 
+
 
 def dice_roll(stats=0):
     """
@@ -180,6 +222,7 @@ def keeper_action(keeper, weather=0):
         gamelogger.gamestep("Keeper {} Fail".format(keeper.get("Name","")))
     return game
 
+
 def seeker_action(seeker, weather=0):
     """
         Performs a standard Seeker action
@@ -222,9 +265,11 @@ def seeker_action(seeker, weather=0):
     elif roll >= 10:
         game["streak"] += 2
         gamelogger.gamestep("Seeker {} Success".format(seeker.get("Name","")))
+        gamelogger.gamestep("current streak bonus: {}".format(game["streak"]))
     elif roll >= 7:
         game["streak"] += 1
         gamelogger.gamestep("Seeker {} Partial Success".format(seeker.get("Name","")))
+        gamelogger.gamestep("current streak bonus: {}".format(game["streak"]))
     else:
         game["streak"] = -2
         gamelogger.gamestep("Seeker {} Fail".format(seeker.get("Name","")))
@@ -333,7 +378,7 @@ def run_game(teams, use_duplicate_roles=True, use_weather=False):
         "ending_team" : None,
         "game_turns": 0,
         "score" : [0,0],
-        "start_team": start_cond["start_team"],
+        "start_team": teams[start_cond["start_team"]]["Name"],
         "weather": start_cond["weather"]
     }
     start_team = start_cond["start_team"]
@@ -343,33 +388,44 @@ def run_game(teams, use_duplicate_roles=True, use_weather=False):
         game_results["game_turns"] += 1
         # Chaser Actions
         # first team Chaser
-        action_results = chaser_action(teams[start_team]["Chasers"],next_chaser[start_team],weather=weather)
+        gamelogger.gamestep("Team 1 Chaser")
+        action_results = chaser_action(teams[start_team]["Chaser"],next_chaser[start_team],weather=weather)
         game_results["score"][start_team] += action_results["own"]
         game_results["score"][last_team] += action_results["other"]
+        next_chaser[start_team] = (next_chaser[start_team] + 1) % len(teams[start_team]["Chaser"])
         # second team Chaser
-        action_results = chaser_action(teams[last_team]["Chasers"],next_chaser[last_team],weather=weather)
+        gamelogger.gamestep("Team 2 Chaser")
+        action_results = chaser_action(teams[last_team]["Chaser"],next_chaser[last_team],weather=weather)
         game_results["score"][last_team] += action_results["own"]
         game_results["score"][start_team] += action_results["other"]
+        next_chaser[last_team] = (next_chaser[last_team] + 1) % len(teams[last_team]["Chaser"])
         # Beater Actions
         # first team Beater
-        action_results = beater_action(teams[start_team]["Beaters"], next_beater[start_team],weather=weather)
+        gamelogger.gamestep("Team 1 Beater")
+        action_results = beater_action(teams[start_team]["Beater"], next_beater[start_team],weather=weather)
         game_results["score"][start_team] += action_results["own"]
         game_results["score"][last_team] += action_results["other"]
+        next_beater[start_team] = (next_beater[start_team] + 1) % len(teams[start_team]["Beater"])
         # second team Beater
-        action_results = beater_action(teams[last_team]["Beaters"],next_beater[last_team],weather=weather)
+        gamelogger.gamestep("Team 2 Beater")
+        action_results = beater_action(teams[last_team]["Beater"],next_beater[last_team],weather=weather)
         game_results["score"][last_team] += action_results["own"]
         game_results["score"][start_team] += action_results["other"]
+        next_beater[last_team] = (next_beater[last_team] + 1) % len(teams[last_team]["Beater"])
         # Keeper Actions
         # first team Keeper
+        gamelogger.gamestep("Team 1 Keeper")
         action_results = keeper_action(teams[start_team]["Keeper"],weather=weather)
         game_results["score"][start_team] += action_results["own"]
         game_results["score"][last_team] += action_results["other"]
         # second team Keeper
+        gamelogger.gamestep("Team 2 Keeper")
         action_results = keeper_action(teams[last_team]["Keeper"],weather=weather)
         game_results["score"][last_team] += action_results["own"]
         game_results["score"][start_team] += action_results["other"]
         # Seeker Actions
         # first team Seeker
+        gamelogger.gamestep("Team 1 Seeker")
         action_results = seeker_action(teams[start_team]["Seeker"], weather=weather)
         if action_results["snitch"]:
             # check if snitch was cought
@@ -382,12 +438,13 @@ def run_game(teams, use_duplicate_roles=True, use_weather=False):
         else: 
             teams[start_team]["Seeker"]["streak"] = action_results["streak"]
         # second team Seeker
+        gamelogger.gamestep("Team 2 Seeker")
         action_results = seeker_action(teams[last_team]["Seeker"], weather=weather)
         if action_results["snitch"]:
             snitch = True
             game_results["score"][last_team] += 150
             game_results["ending_team"] = teams[last_team]["Name"]
-        elif action_results < 0:
+        elif action_results["streak"] < 0:
                 teams[last_team]["Seeker"]["temp"] -= 2
         else:
              teams[last_team]["Seeker"]["streak"] = action_results["streak"]
@@ -410,20 +467,14 @@ def run_game(teams, use_duplicate_roles=True, use_weather=False):
         teams[0]["Name"], game_results["score"][0],
         teams[1]["Name"], game_results["score"][1]
     ))
+    #increase score verbosity
+    scores = {
+        teams[start_team]["Name"]: game_results["score"][start_team],
+        teams[last_team]["Name"]: game_results["score"][last_team]
+    }
+    game_results["score"] = scores
     return game_results
 
-
-def load_teams(filename):
-    """
-    Loads a Match json file containing two teams
-    """
-    teams = {}
-    with open(filename,mode="r") as lfile:
-            teams = json.load(lfile)
-    return teams
-
-def add_gamelog_level():
-    logging.addLevelName(15, "GAMESTEP")
 
 if __name__ == "__main__":
     args = parser.parse_args()
@@ -431,14 +482,14 @@ if __name__ == "__main__":
     try:
         teams = load_teams(args.team_file)
         # setup logging parameter
-        add_gamelog_level()
+        __init__()
         gamelogger = logging.getLogger("GameLogger")
-        gamelogger.setLevel(15)
+        gamelogger.setLevel(15)        
         if args.collect_metadata:
             # setup Logging Parameter
             gamehandler = logging.FileHandler("{}_vs_{}.txt".format(teams[0]["Name"], teams[1]["Name"]))
             gamelogger.addHandler(gamehandler)
-        result = run_game(teams,use_duplicate_roles=args.duplicate_roles,use_weather=args.weather)
+        result = run_game(teams,use_duplicate_roles=args.duplicate_roles,use_weather=args.use_weather)
         with open("{}_vs_{}_result.json".format(teams[0]["Name"], teams[1]["Name"]),mode="w") as result_file:
             json.dump(result,result_file)
     except OSError as e:
