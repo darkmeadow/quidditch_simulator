@@ -4,7 +4,7 @@
 
 - [Player](#Player_object)
 - [Team](#Team_object)
-- [Match](#matchobject)
+- [Match](#Match_object)
 
 ## Player_Object
 
