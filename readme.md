@@ -11,7 +11,7 @@ A Quidditch game simulator based on Wackstevens [Witchcraft and Wizzardry](http:
 
 ## Installation
 
-Clone repository into local working directory
+Clone repository or download files into local working directory.
 
 ## Usage
 
