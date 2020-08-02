@@ -4,12 +4,14 @@ import json
 import random
 
 logger = logging.getLogger(__name__)
+sh = logging.StreamHandler()
+logger.addHandler(sh)
 logger.setLevel(logging.INFO)
 
 # argument parser
 parser = argparse.ArgumentParser(description="Run a game of quidditch,")
 parser.add_argument('--team-file', required=True, type=str, help="File location and name containing a 2 element list of team collections")
-parser.add_argument("--single-roles", action="store_false", help="set only use 1 player per roll of the teams.")
+parser.add_argument("--single-roles", action="store_true", help="set only use 1 player per roll of the teams.")
 parser.add_argument("--use-weather", action="store_true", help="set to include Weather modifyer for the game")
 parser.add_argument("--collect-metadata", action="store_true", help="set collect Game Metadata")
 
@@ -27,6 +29,7 @@ def gamestep(self, message, *args, **kws):
             **kws
         """
         if self.isEnabledFor(15):
+            # Yes, logger takes its '*args' as 'args'.
             self._log(15, message, args, **kws)
 
 def add_game_logging():
@@ -41,7 +44,9 @@ class Base_game:
 
     # Name of the game first team is the home team
     name = None
-
+    get_metadata = None
+    use_weather = None
+    single_roles = None
     # start conditions
     teams = {}
     snitch = None
@@ -59,6 +64,8 @@ class Base_game:
     score = [0,0]
     ending_team = None
 
+    player_results = {}
+
     def __init__(self, name, team_file=None):
         """
             Initiates Base Game quidditch class
@@ -71,7 +78,6 @@ class Base_game:
                 Path and name of team file
         """
         self.name = name
-        self.weather = 0
         add_game_logging()
         if team_file:
             self.load_teams(team_file)
@@ -96,6 +102,20 @@ class Base_game:
         return teams
 
 
+    def add_track_record(self, name, status):
+        """
+            Adds and update player track records
+
+            Parameters:
+            ----------
+            name : str
+                Name of the player to track
+            status : str
+                Status of the player
+        """
+        record = list(self.player_results.get(name,[]))
+        record.append(status)
+        self.player_results[name] = record
 
     def dice_roll(self, stats=0):
         """
@@ -148,21 +168,29 @@ class Base_game:
         stats = beaters[active]
         # roll with player stats + long term modifyers and one time temporary ones and weather if applied
         roll = self.dice_roll(stats["base"] + stats["mod"] + stats["temp"] + self.weather) 
+        # get player name
+        name = beaters[active].get("Name", "Beater" + str(active))
         # relative score changes
         game = {"own": 0, "other": 0}
+        status = None
         if roll >= 10:
             # on success
             game["own"] += 10
             game["other"] -= 10
-            gamelogger.gamestep("{}: Success ".format(beaters[active].get("Name", "Beater" + str(active))))
+            gamelogger.gamestep("{}: Success ".format(name))
+            status = 2
         elif roll >= 7:
             # on partial success
             game["own"] += 10
-            gamelogger.gamestep("{}: Partial Success".format(beaters[active].get("Name", "Beater" + str(active))))
+            gamelogger.gamestep("{}: Partial Success".format(name))
+            status = 1
         else:
             # on fail
             game["other"]  += 10
-            gamelogger.gamestep("{}: Fail ".format(beaters[active].get("Name", "Beater" + str(active))))
+            gamelogger.gamestep("{}: Fail ".format(name))
+            status = 0
+        if self.get_metadata:
+            self.add_track_record(name,status)
         return game
 
 
@@ -199,20 +227,28 @@ class Base_game:
         stats = chasers[active]
         # roll with player stats + long term modifyers and one time temporary ones and weather if applied
         roll = self.dice_roll(stats["base"] + stats["mod"] + stats["temp"] + self.weather) 
+        # get player name
+        name = chasers[active].get("Name", "Chaser" + str(active))
         # relative score changes
         game = {"own": 0, "other": 0}
+        status = None
         if roll >= 10:
             # on success
             game["own"] +=20
             gamelogger.gamestep("{}: Success".format(chasers[active].get("Name", "Chaser" + str(active))))
+            status = 2
         elif roll >= 7:
             # on partial success
             game["own"] += 10
             gamelogger.gamestep("{}: Partial Success".format(chasers[active].get("Name", "Chaser" + str(active))))
+            status = 1
         else:
             # on fail
             game["other"] += 10
             gamelogger.gamestep("{}: Fail".format(chasers[active].get("Name", "Chaser" + str(active))))
+            status = 0
+        if self.get_metadata:
+            self.add_track_record(name,status)
         return game
 
 
@@ -244,18 +280,26 @@ class Base_game:
         """
     # roll with player stats + long term modifyers and one time temporary ones and weather if applied
         roll = self.dice_roll(keeper["base"] + keeper["mod"] + keeper["temp"] + self.weather) 
+        # get player name
+        name = keeper.get("Name","Keeper")
         # relative score changes
         game = {"own": 0, "other": 0}
+        status = None
         if roll >= 10:
             game["own"] += 10
             game["other"] -= 10
-            gamelogger.gamestep("{}: Success".format(keeper.get("Name","Keeper")))
+            gamelogger.gamestep("{}: Success".format(name))
+            status = 2
         elif roll >= 7:
             game["other"] -= 10
             gamelogger.gamestep("{}: Partial Success".format(keeper.get("Name","Keeper")))
+            status = 1
         else:
             game["other"] += 10
             gamelogger.gamestep("{}: Fail".format(keeper.get("Name","Keeper")))
+            status = 0
+        if self.get_metadata:
+            self.add_track_record(name,status)
         return game
 
 
@@ -289,24 +333,33 @@ class Base_game:
         """
         # get modifyer for seeker
         stats = seeker
+        # get player name
+        name = seeker.get("Name","Seeker")
         # roll with player stats + long term modifyers and one time temporary ones and weather if applied
         roll = self.dice_roll(stats["base"] + stats["mod"] + stats["streak"] + stats["temp"] + self.weather) 
         # seeker modifyer tracker
         game = {"streak": stats["streak"], "snitch": False}
+        satus = None
         if roll >= 15:
             game["snitch"] = True
             gamelogger.gamestep("{} cought the Snitch!".format(seeker.get("Name","Seeker")))
+            status = 3
         elif roll >= 10:
             game["streak"] += 2
             gamelogger.gamestep("{}: Success".format(seeker.get("Name","Seeker")))
             gamelogger.gamestep("current streak bonus {}".format(game["streak"]))
+            status = 2
         elif roll >= 7:
             game["streak"] += 1
             gamelogger.gamestep("{}: Partial Success".format(seeker.get("Name","Seeker")))
             gamelogger.gamestep("current streak bonus {}".format(game["streak"]))
+            status = 1
         else:
-            game["streak"] = -1
-            gamelogger.gamestep("{}: Fail".format(seeker.get("Name","Seeker")))
+            game["streak"] = -2
+            gamelogger.gamestep("{}: Fail".format(name))
+            status = 0
+        if self.get_metadata:
+            self.add_track_record(name,status)
         return game
 
 
@@ -362,16 +415,18 @@ class Base_game:
         }
 
 
-    def run_game(self, use_duplicate_roles=True, use_weather=False):
+    def run_game(self, single_roles=False, use_weather=False):
         """
             Performs quidditch player actions until the snitch is cought
 
             Parameters
             ----------
-            use_duplicate_roles : boolean
-                Flag if all beaters and chaser of a team should rolled with individual
-                modifyers.
-                Default: True
+            single_roles : boolean
+                Flag if only one beater and chaser of a team should roll
+                Default: False
+            use_weather : boolean
+                Flag if game metadata should be collected.
+                Default: False
             use_weather : boolean
                 Flag if weather modifyer should aplly to the game.
                 Default: False
@@ -393,6 +448,9 @@ class Base_game:
                 weather : int
                     Weather modifyer for the game
         """
+        self.single_roles = single_roles
+        self.use_weather = use_weather
+
         # set up game variables
         self.snitch = False
 
@@ -419,14 +477,14 @@ class Base_game:
             action_results = self.chaser_action(self.teams[start_i]["Chaser"], self.next_chaser[start_i])
             self.score[start_i] += action_results ["own"]
             self.score[last_i] += action_results["other"]
-            if use_duplicate_roles:
+            if not single_roles:
                 self.next_chaser[start_i] = (self.next_chaser[start_i] + 1) % len(self.teams[start_i]["Chaser"])
             # second team Chaser
             gamelogger.gamestep("{} Chaser".format(team_2_name))
             action_results = self.chaser_action(self.teams[last_i]["Chaser"], self.next_chaser[last_i])
             self.score[last_i] += action_results["own"]
             self.score[start_i] += action_results["other"]
-            if use_duplicate_roles:
+            if not single_roles:
                 self.next_chaser[last_i] = (self.next_chaser[last_i] + 1) % len(self.teams[last_i]["Chaser"])
             # Beater Actions
             # first team Beater
@@ -434,14 +492,14 @@ class Base_game:
             action_results = self.beater_action(self.teams[start_i]["Beater"], self.next_beater[start_i])
             self.score[start_i] += action_results["own"]
             self.score[last_i] += action_results["other"]
-            if use_duplicate_roles:
+            if not single_roles:
                 self.next_beater[start_i] = (self.next_beater[start_i] + 1) % len(self.teams[start_i]["Beater"])
             # second team Beater
             gamelogger.gamestep("{} Beater".format(team_2_name))
             action_results = self.beater_action(self.teams[last_i]["Beater"],self.next_beater[last_i])
             self.score[last_i] += action_results["own"]
             self.score[start_i] += action_results["other"]
-            if use_duplicate_roles:
+            if not single_roles:
                 self.next_beater[last_i] = (self.next_beater[last_i] + 1) % len(self.teams[last_i]["Beater"])
             # Keeper Actions
             # first team Keeper
@@ -500,9 +558,12 @@ class Base_game:
             "start_team": self.teams[start_i]["Name"],
             "weather": self.weather
         }
+        if self.player_results:
+            self.game_results["player_results"] = self.player_results
         # send basic info to logger
-        logger.info("Match Finished after {} turns".format(self.game_turns))
+        logger.info("\nMatch Finished after {} turns".format(self.game_turns))
         logger.info("{} ended the Match".format(self.ending_team))
+        logger.info("Final Score: {} -{}".format(self.score[0],self.score[1]))
         # send in depth info to game logger
         gamelogger.gamestep("\n{} ended the Game!".format(self.ending_team))
         gamelogger.gamestep("Final Score:")
@@ -518,22 +579,27 @@ if __name__ == "__main__":
     args = parser.parse_args()
     # load team file
     try:
+        # create game with file name as game name
         name = str(args.team_file).rsplit(sep='/', maxsplit=1)[-1].rsplit(sep='.',maxsplit=1)[0]
         game = Base_game(name)
         teams = game.load_teams(args.team_file)
+
         # setup logging parameter
+        add_game_logging()
         gamelogger = logging.getLogger("GameLogger")
-        gamelogger.setLevel(15)        
+        gamelogger.setLevel(15)
         if args.collect_metadata:
             # setup log file handler
+            game.get_metadata = args.collect_metadata
             gamehandler = logging.FileHandler("{}.txt".format(game.name))
             gamelogger.addHandler(gamehandler)
         # run game
-        result = game.run_game(use_duplicate_roles=args.single_roles, use_weather=args.use_weather)
+        result = game.run_game(single_roles=args.single_roles, use_weather=args.use_weather)
         # dump result into file
         with open("{}_result.json".format(game.name),mode="w") as result_file:
             json.dump(result, result_file, sort_keys=True, indent=4)
-    except OSError as e:
-        logger.error("unable to load file: \n" + e)
+    except FileNotFoundError as e:
+        logger.error(e)
+        logger.error("\tCheck your file name and location!")
     except IndexError as e2:
         logger.error(e2)
