@@ -9,7 +9,7 @@ logger.setLevel(logging.INFO)
 # argument parser
 parser = argparse.ArgumentParser(description="Run a game of quidditch,")
 parser.add_argument('--team-file', required=True, type=str, help="File location and name containing a 2 element list of team collections")
-parser.add_argument("--duplicate-roles", action="store_true", help="set to alternate between multiple members of the team if applicable ")
+parser.add_argument("--single-roles", action="store_false", help="set only use 1 player per roll of the teams.")
 parser.add_argument("--use-weather", action="store_true", help="set to include Weather modifyer for the game")
 parser.add_argument("--collect-metadata", action="store_true", help="set collect Game Metadata")
 
@@ -270,7 +270,7 @@ def seeker_action(seeker, weather=0):
         gamelogger.gamestep("{}: Partial Success".format(seeker.get("Name","Seeker")))
         gamelogger.gamestep("current streak bonus {}".format(game["streak"]))
     else:
-        game["streak"] = -2
+        game["streak"] = -1
         gamelogger.gamestep("{}: Fail".format(seeker.get("Name","Seeker")))
     return game
 
@@ -393,26 +393,30 @@ def run_game(teams, use_duplicate_roles=True, use_weather=False):
         action_results = chaser_action(teams[start_team]["Chaser"],next_chaser[start_team],weather=weather)
         game_results["score"][start_team] += action_results["own"]
         game_results["score"][last_team] += action_results["other"]
-        next_chaser[start_team] = (next_chaser[start_team] + 1) % len(teams[start_team]["Chaser"])
+        if use_duplicate_roles:
+            next_chaser[start_team] = (next_chaser[start_team] + 1) % len(teams[start_team]["Chaser"])
         # second team Chaser
         gamelogger.gamestep("{} Chaser".format(team_2_name))
         action_results = chaser_action(teams[last_team]["Chaser"],next_chaser[last_team],weather=weather)
         game_results["score"][last_team] += action_results["own"]
         game_results["score"][start_team] += action_results["other"]
-        next_chaser[last_team] = (next_chaser[last_team] + 1) % len(teams[last_team]["Chaser"])
+        if use_duplicate_roles:
+            next_chaser[last_team] = (next_chaser[last_team] + 1) % len(teams[last_team]["Chaser"])
         # Beater Actions
         # first team Beater
         gamelogger.gamestep("{} Beater".format(team_1_name))
         action_results = beater_action(teams[start_team]["Beater"], next_beater[start_team],weather=weather)
         game_results["score"][start_team] += action_results["own"]
         game_results["score"][last_team] += action_results["other"]
-        next_beater[start_team] = (next_beater[start_team] + 1) % len(teams[start_team]["Beater"])
+        if use_duplicate_roles:
+            next_beater[start_team] = (next_beater[start_team] + 1) % len(teams[start_team]["Beater"])
         # second team Beater
         gamelogger.gamestep("{} Beater".format(team_2_name))
         action_results = beater_action(teams[last_team]["Beater"],next_beater[last_team],weather=weather)
         game_results["score"][last_team] += action_results["own"]
         game_results["score"][start_team] += action_results["other"]
-        next_beater[last_team] = (next_beater[last_team] + 1) % len(teams[last_team]["Beater"])
+        if use_duplicate_roles:
+            next_beater[last_team] = (next_beater[last_team] + 1) % len(teams[last_team]["Beater"])
         # Keeper Actions
         # first team Keeper
         gamelogger.gamestep("{} Keeper".format(team_1_name))
@@ -492,7 +496,7 @@ if __name__ == "__main__":
             gamehandler = logging.FileHandler("{}_vs_{}.txt".format(teams[0]["Name"], teams[1]["Name"]))
             gamelogger.addHandler(gamehandler)
         # run game
-        result = run_game(teams,use_duplicate_roles=args.duplicate_roles,use_weather=args.use_weather)
+        result = run_game(teams,use_duplicate_roles=args.single_roles,use_weather=args.use_weather)
         # dump result into file
         with open("{}_vs_{}_result.json".format(teams[0]["Name"], teams[1]["Name"]),mode="w") as result_file:
             json.dump(result, result_file, sort_keys=True, indent=4)
