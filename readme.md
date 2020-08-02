@@ -1,6 +1,6 @@
 # Witchcraft & Wizzardry Quidditch Simulator
 
-A Quidditch game simulator based on Wackstevens [Witchcraft and Wizzardry](tablestory.tv/waw) System:
+A Quidditch game simulator based on Wackstevens [Witchcraft and Wizzardry](http:www.tablestory.tv/waw) System:
 
 ## Table of Contents
 
@@ -94,6 +94,6 @@ Optionally:
 ## Credits
 
 ### Thanks to
-+ Wacksteven for creating the system [tablestory.tv/waw](tablestory.tv/waw)
++ Wacksteven for creating the system [tablestory.tv/waw](http:www.tablestory.tv/waw)
 + Kujio for building the discord bot that inspired this simulation
 + Last-Socratic for hist quidditch analyser and code insight
