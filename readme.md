@@ -93,7 +93,7 @@ Optionally:
 
 ## Credits
 
-### Thank you to
+### Thanks to
 + Wacksteven for creating the system [tablestory.tv/waw](tablestory.tv/waw)
 + Kujio for building the discord bot that inspired this simulation
 + Last-Socratic for hist quidditch analyser and code insight
