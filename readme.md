@@ -42,12 +42,12 @@ for in full Datatype explanations got to [examples](/examples/Readme.md)
     ```
     + If you want to simulate weather effects add
         ```
-        --use_weather
+        --use-weather
         ```
 
-    + If you want to simulate weather effects add
+    + If you only want to use one beater and chaser add
         ```
-        --use_weather
+        --single-roles
         ```
         
     + To return a more in depth game log add
