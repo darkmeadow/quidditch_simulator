@@ -1,9 +1,64 @@
 {
     "ending_team": "Team_1",
     "game_turns": 5,
+    "player_results": {
+        "Beater0": [
+            0,
+            1,
+            1,
+            0,
+            1,
+            0
+        ],
+        "Beater1": [
+            0,
+            0,
+            0,
+            0
+        ],
+        "Chaser0": [
+            1,
+            1,
+            0,
+            1
+        ],
+        "Chaser1": [
+            1,
+            1,
+            0,
+            0
+        ],
+        "Chaser2": [
+            0,
+            0
+        ],
+        "Keeper": [
+            0,
+            0,
+            1,
+            0,
+            2,
+            0,
+            1,
+            2,
+            0,
+            0
+        ],
+        "Seeker": [
+            0,
+            0,
+            0,
+            2,
+            2,
+            1,
+            2,
+            2,
+            3
+        ]
+    },
     "score": {
-        "Team_1": 250,
-        "Team_2": 90
+        "Team_1": 290,
+        "Team_2": 100
     },
     "start_team": "Team_1",
     "weather": -1

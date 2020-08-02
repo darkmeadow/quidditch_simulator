@@ -339,7 +339,7 @@ class Base_game:
         roll = self.dice_roll(stats["base"] + stats["mod"] + stats["streak"] + stats["temp"] + self.weather) 
         # seeker modifyer tracker
         game = {"streak": stats["streak"], "snitch": False}
-        satus = None
+        status = None
         if roll >= 15:
             game["snitch"] = True
             gamelogger.gamestep("{} cought the Snitch!".format(seeker.get("Name","Seeker")))

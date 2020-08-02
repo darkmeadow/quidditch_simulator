@@ -1,10 +1,72 @@
 {
-    "ending_team": "Gryffindor",
-    "game_turns": 5,
-    "score": {
-        "Gryffindor": 240,
-        "Slytherin": 60
+    "ending_team": "Slytherin",
+    "game_turns": 4,
+    "player_results": {
+        "Carson Crane": [
+            2,
+            1,
+            1,
+            0
+        ],
+        "Cicero Fern": [
+            0
+        ],
+        "Cove Mandrake": [
+            1,
+            1,
+            1,
+            0
+        ],
+        "Dingo Fiddlewood": [
+            2,
+            2,
+            2,
+            3
+        ],
+        "Egbert Rubble": [
+            1,
+            1
+        ],
+        "Gorge Clockwork": [
+            0,
+            0
+        ],
+        "Hawk Newts": [
+            0,
+            0
+        ],
+        "Indigo Dogbane": [
+            0,
+            1,
+            1,
+            1
+        ],
+        "Kenneth Prott": [
+            0
+        ],
+        "Lacy Rabbot": [
+            1,
+            1
+        ],
+        "Lonnie Hawks": [
+            2
+        ],
+        "Steel Buckthorn": [
+            0,
+            2
+        ],
+        "Tim Butters": [
+            0
+        ],
+        "Tomas Striker": [
+            1,
+            0
+        ]
     },
-    "start_team": "Slytherin",
-    "weather": 0
+    "score": {
+        "Gryffindor": 80,
+        "Slytherin": 200
+    },
+    "start_team": "Gryffindor",
+    "weather": -2
 }
