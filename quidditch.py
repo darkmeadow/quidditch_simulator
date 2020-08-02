@@ -51,7 +51,6 @@ def gamestep(self, message, *args, **kws):
     **kws
     """
     if self.isEnabledFor(15):
-        # Yes, logger takes its '*args' as 'args'.
         self._log(15, message, args, **kws) 
 
 
@@ -486,12 +485,14 @@ if __name__ == "__main__":
         gamelogger = logging.getLogger("GameLogger")
         gamelogger.setLevel(15)        
         if args.collect_metadata:
-            # setup Logging Parameter
+            # setup log file handler
             gamehandler = logging.FileHandler("{}_vs_{}.txt".format(teams[0]["Name"], teams[1]["Name"]))
             gamelogger.addHandler(gamehandler)
+        # run game
         result = run_game(teams,use_duplicate_roles=args.duplicate_roles,use_weather=args.use_weather)
+        # dump result into file
         with open("{}_vs_{}_result.json".format(teams[0]["Name"], teams[1]["Name"]),mode="w") as result_file:
-            json.dump(result,result_file)
+            json.dump(result, result_file, sort_keys=True, indent=4)
     except OSError as e:
         logger.error("unable to load file: \n" + e)
     except IndexError as e2:
