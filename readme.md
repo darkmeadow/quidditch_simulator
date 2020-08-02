@@ -87,7 +87,7 @@ Optionally:
 
 + Verbose gamelogs to get a condenced game review
 
-+ Analyze Game/ season outcomes
++ analyse Game/ season outcomes
 
 + Add house rules
 
