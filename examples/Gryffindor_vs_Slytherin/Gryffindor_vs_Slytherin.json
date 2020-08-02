@@ -1,0 +1,100 @@
+[
+    {
+        "Name": "Gryffindor",
+        "Beater": [
+            {
+                "Name": "Egbert Rubble",
+                "base": 2,
+                "mod":0,
+                "temp": 0
+            },
+            {
+                "Name": "Lacy Rabbot",
+                "base": 1,
+                "mod":0,
+                "temp": 0
+            }
+        ],
+        "Chaser": [
+            {
+                "Name": "Tomas Striker",
+                "base": 2,
+                "mod":0,
+                "temp": 0},
+            {
+                "Name": "Tim Butters",
+                "base": 1,
+                "mod":0,
+                "temp": 0
+            },
+            {
+                "Name": "Kenneth Prott",
+                "base": 1,
+                "mod":0,
+                "temp": 0
+            }
+        ],
+        "Keeper": {
+            "Name": "Cove Mandrake",
+            "base": 0,
+            "mod":0,
+            "temp": 0
+        },
+        "Seeker": {
+            "Name": "Indigo Dogbane",
+            "base": 1,
+            "mod":0,
+            "streak" : 0,
+            "temp": 0
+        }
+    },
+    {
+        "Name": "Slytherin",
+        "Beater": [
+            {
+                "Name": "Hawk Newts",
+                "base": 0,
+                "mod":0,
+                "temp": 0
+            },
+            {
+                "Name": "Steel Buckthorn",
+                "base": 2,
+                "mod":0,
+                "temp": 0
+            }
+        ],
+        "Chaser": [
+            {
+                "Name": "Gorge Clockwork",
+                "base": 0,
+                "mod":0,
+                "temp": 0},
+            {
+                "Name": "Cicero Fern",
+                "base": 1,
+                "mod":0,
+                "temp": 0
+            },
+            {
+                "Name": "Lonnie Hawks",
+                "base": 2,
+                "mod":0,
+                "temp": 0
+            }
+        ],
+        "Keeper": {
+            "Name": "Carson Crane",
+            "base": 2,
+            "mod":0,
+            "temp": 0
+        },
+        "Seeker": {
+            "Name": "Dingo Fiddlewood",
+            "base": 2,
+            "mod":0,
+            "streak": 0,
+            "temp": 0
+        }
+    }
+]

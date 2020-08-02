@@ -1,10 +1,10 @@
 {
     "ending_team": "Team_1",
-    "game_turns": 9,
+    "game_turns": 5,
     "score": {
-        "Team_2": 220,
-        "Team_1": 260
+        "Team_1": 250,
+        "Team_2": 90
     },
-    "start_team": "Team_2",
-    "weather": -2
+    "start_team": "Team_1",
+    "weather": -1
 }

@@ -113,15 +113,15 @@ def beater_action(beaters, active=0, weather=0):
         # on success
         game["own"] += 10
         game["other"] -= 10
-        gamelogger.gamestep("Beater {} Success ".format(beaters[active].get("Name", active)))
+        gamelogger.gamestep("{}: Success ".format(beaters[active].get("Name", "Beater" + str(active))))
     elif roll >= 7:
         # on partial success
         game["own"] += 10
-        gamelogger.gamestep("Beater {} Partial Success".format(beaters[active].get("Name", active)))
+        gamelogger.gamestep("{}: Partial Success".format(beaters[active].get("Name", "Beater" + str(active))))
     else:
         # on fail
         game["other"]  += 10
-        gamelogger.gamestep("Beater {} fail ".format(beaters[active].get("Name", active)))
+        gamelogger.gamestep("{}: Fail ".format(beaters[active].get("Name", "Beater" + str(active))))
     return game
 
 
@@ -165,15 +165,15 @@ def chaser_action(chasers, active, weather=0):
     if roll >= 10:
         # on success
         game["own"] +=20
-        gamelogger.gamestep("Chaser {}, Success".format(chasers[active].get("Name", active)))
+        gamelogger.gamestep("{}: Success".format(chasers[active].get("Name", "Chaser" + str(active))))
     elif roll >= 7:
         # on partial success
         game["own"] += 10
-        gamelogger.gamestep("Chaser {}, Partial Success".format(chasers[active].get("Name", active)))
+        gamelogger.gamestep("{}: Partial Success".format(chasers[active].get("Name", "Chaser" + str(active))))
     else:
         # on fail
         game["other"] += 10
-        gamelogger.gamestep("Chaser: {}, Success".format(chasers[active].get("Name", active)))
+        gamelogger.gamestep("{}: Fail".format(chasers[active].get("Name", "Chaser" + str(active))))
     return game
 
 
@@ -212,13 +212,13 @@ def keeper_action(keeper, weather=0):
     if roll >= 10:
         game["own"] += 10
         game["other"] -= 10
-        gamelogger.gamestep("Keeper {} Success".format(keeper.get("Name","")))
+        gamelogger.gamestep("{}: Success".format(keeper.get("Name","Keeper")))
     elif roll >= 7:
         game["other"] -= 10
-        gamelogger.gamestep("Keeper {} Partial Success".format(keeper.get("Name","")))
+        gamelogger.gamestep("{}: Partial Success".format(keeper.get("Name","Keeper")))
     else:
         game["other"] += 10
-        gamelogger.gamestep("Keeper {} Fail".format(keeper.get("Name","")))
+        gamelogger.gamestep("{}: Fail".format(keeper.get("Name","Keeper")))
     return game
 
 
@@ -260,18 +260,18 @@ def seeker_action(seeker, weather=0):
     game = {"streak": stats["streak"], "snitch": False}
     if roll >= 15:
         game["snitch"] = True
-        gamelogger.gamestep("Seeker {} cought the Snitch!".format(seeker.get("Name","")))
+        gamelogger.gamestep("{} cought the Snitch!".format(seeker.get("Name","Seeker")))
     elif roll >= 10:
         game["streak"] += 2
-        gamelogger.gamestep("Seeker {} Success".format(seeker.get("Name","")))
-        gamelogger.gamestep("current streak bonus: {}".format(game["streak"]))
+        gamelogger.gamestep("{}: Success".format(seeker.get("Name","Seeker")))
+        gamelogger.gamestep("current streak bonus {}".format(game["streak"]))
     elif roll >= 7:
         game["streak"] += 1
-        gamelogger.gamestep("Seeker {} Partial Success".format(seeker.get("Name","")))
-        gamelogger.gamestep("current streak bonus: {}".format(game["streak"]))
+        gamelogger.gamestep("{}: Partial Success".format(seeker.get("Name","Seeker")))
+        gamelogger.gamestep("current streak bonus {}".format(game["streak"]))
     else:
         game["streak"] = -2
-        gamelogger.gamestep("Seeker {} Fail".format(seeker.get("Name","")))
+        gamelogger.gamestep("{}: Fail".format(seeker.get("Name","Seeker")))
     return game
 
 
@@ -315,10 +315,10 @@ def pre_game(use_weather):
         team2 = dice_roll()
     if team1 > team2:
         start_team = 0
-        gamelogger.gamestep("the Home Team Starts")
+        gamelogger.gamestep("the Home Team Starts\n")
     else:
         start_team = 1
-        gamelogger.gamestep("the Guest Team Starts")
+        gamelogger.gamestep("the Guest Team Starts\n")
     # calculate index of second team
     last_team = (start_team + 1) % 2
     return {
@@ -382,49 +382,51 @@ def run_game(teams, use_duplicate_roles=True, use_weather=False):
     }
     start_team = start_cond["start_team"]
     last_team = start_cond["last_team"]
+    team_1_name = teams[start_team]["Name"]
+    team_2_name = teams[last_team]["Name"]
     # run game simulation
     while not snitch:
         game_results["game_turns"] += 1
         # Chaser Actions
         # first team Chaser
-        gamelogger.gamestep("Team 1 Chaser")
+        gamelogger.gamestep("{} Chaser".format(team_1_name))
         action_results = chaser_action(teams[start_team]["Chaser"],next_chaser[start_team],weather=weather)
         game_results["score"][start_team] += action_results["own"]
         game_results["score"][last_team] += action_results["other"]
         next_chaser[start_team] = (next_chaser[start_team] + 1) % len(teams[start_team]["Chaser"])
         # second team Chaser
-        gamelogger.gamestep("Team 2 Chaser")
+        gamelogger.gamestep("{} Chaser".format(team_2_name))
         action_results = chaser_action(teams[last_team]["Chaser"],next_chaser[last_team],weather=weather)
         game_results["score"][last_team] += action_results["own"]
         game_results["score"][start_team] += action_results["other"]
         next_chaser[last_team] = (next_chaser[last_team] + 1) % len(teams[last_team]["Chaser"])
         # Beater Actions
         # first team Beater
-        gamelogger.gamestep("Team 1 Beater")
+        gamelogger.gamestep("{} Beater".format(team_1_name))
         action_results = beater_action(teams[start_team]["Beater"], next_beater[start_team],weather=weather)
         game_results["score"][start_team] += action_results["own"]
         game_results["score"][last_team] += action_results["other"]
         next_beater[start_team] = (next_beater[start_team] + 1) % len(teams[start_team]["Beater"])
         # second team Beater
-        gamelogger.gamestep("Team 2 Beater")
+        gamelogger.gamestep("{} Beater".format(team_2_name))
         action_results = beater_action(teams[last_team]["Beater"],next_beater[last_team],weather=weather)
         game_results["score"][last_team] += action_results["own"]
         game_results["score"][start_team] += action_results["other"]
         next_beater[last_team] = (next_beater[last_team] + 1) % len(teams[last_team]["Beater"])
         # Keeper Actions
         # first team Keeper
-        gamelogger.gamestep("Team 1 Keeper")
+        gamelogger.gamestep("{} Keeper".format(team_1_name))
         action_results = keeper_action(teams[start_team]["Keeper"],weather=weather)
         game_results["score"][start_team] += action_results["own"]
         game_results["score"][last_team] += action_results["other"]
         # second team Keeper
-        gamelogger.gamestep("Team 2 Keeper")
+        gamelogger.gamestep("{} Keeper".format(team_2_name))
         action_results = keeper_action(teams[last_team]["Keeper"],weather=weather)
         game_results["score"][last_team] += action_results["own"]
         game_results["score"][start_team] += action_results["other"]
         # Seeker Actions
         # first team Seeker
-        gamelogger.gamestep("Team 1 Seeker")
+        gamelogger.gamestep("{} Seeker".format(team_1_name))
         action_results = seeker_action(teams[start_team]["Seeker"], weather=weather)
         if action_results["snitch"]:
             # check if snitch was cought
@@ -434,21 +436,25 @@ def run_game(teams, use_duplicate_roles=True, use_weather=False):
             break            
         elif action_results["streak"] < 0:
             teams[start_team]["Seeker"]["temp"] -= 2
+            teams[start_team]["Seeker"]["streak"] = 0
         else: 
             teams[start_team]["Seeker"]["streak"] = action_results["streak"]
         # second team Seeker
-        gamelogger.gamestep("Team 2 Seeker")
+        gamelogger.gamestep("{} Seeker".format(team_2_name))
         action_results = seeker_action(teams[last_team]["Seeker"], weather=weather)
         if action_results["snitch"]:
             snitch = True
             game_results["score"][last_team] += 150
             game_results["ending_team"] = teams[last_team]["Name"]
+            break
         elif action_results["streak"] < 0:
-                teams[last_team]["Seeker"]["temp"] -= 2
+            teams[last_team]["Seeker"]["temp"] -= 2
+            teams[last_team]["Seeker"]["streak"] = 0
         else:
              teams[last_team]["Seeker"]["streak"] = action_results["streak"]
-        gamelogger.gamestep("Round {} Score Summary".format(game_results["game_turns"]))
-        gamelogger.gamestep("{}: {} - {}: {}".format(
+        # end of round logs
+        gamelogger.gamestep("\nRound {} Score Summary".format(game_results["game_turns"]))
+        gamelogger.gamestep("{}: {} - {}: {}\n".format(
             teams[0]["Name"],
             game_results["score"][0],
             teams[1]["Name"],
@@ -460,8 +466,8 @@ def run_game(teams, use_duplicate_roles=True, use_weather=False):
     logger.info("Match Finished after {} turns".format(game_results["game_turns"]))
     logger.info("{} ended the Match".format(game_results["ending_team"]))
     # send in depth info to game logger
-    gamelogger.gamestep("{} ended the Game!".format(game_results["ending_team"]))
-    gamelogger.gamestep("final Score:")
+    gamelogger.gamestep("\n{} ended the Game!".format(game_results["ending_team"]))
+    gamelogger.gamestep("Final Score:")
     gamelogger.gamestep("{} {} - {} {}".format(
         teams[0]["Name"], game_results["score"][0],
         teams[1]["Name"], game_results["score"][1]

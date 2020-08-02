@@ -1,0 +1,10 @@
+{
+    "ending_team": "Gryffindor",
+    "game_turns": 5,
+    "score": {
+        "Gryffindor": 240,
+        "Slytherin": 60
+    },
+    "start_team": "Slytherin",
+    "weather": 0
+}
