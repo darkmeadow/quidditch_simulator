@@ -452,14 +452,11 @@ def run_game(teams, use_duplicate_roles=True, use_weather=False):
             teams[last_team]["Seeker"]["streak"] = 0
         else:
              teams[last_team]["Seeker"]["streak"] = action_results["streak"]
+        # ensure no team is below 0 points
+        game_results["score"] = [max(i,0) for i in game_results["score"]]
         # end of round logs
         gamelogger.gamestep("\nRound {} Score Summary".format(game_results["game_turns"]))
-        gamelogger.gamestep("{}: {} - {}: {}\n".format(
-            teams[0]["Name"],
-            game_results["score"][0],
-            teams[1]["Name"],
-            game_results["score"][1],
-            ))
+        gamelogger.gamestep("{}: {} - {}: {}\n".format(teams[0]["Name"], game_results["score"][0], teams[1]["Name"], game_results["score"][1]))
         logger.info("Turn {} Score: {} - {}".format(game_results["game_turns"], game_results["score"][0], game_results["score"][1]))
     # Post Game 
     # send basic info to logger
