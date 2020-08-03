@@ -34,7 +34,7 @@ def gamestep(self, message, *args, **kws):
 
 def add_game_logging():
     """
-    Adds Custom gamestep loglevel and attaches logfunction to logging facility
+        Adds Custom gamestep loglevel and attaches logfunction to logging facility
     """
     logging.addLevelName(15, "GAMESTEP")
     logging.Logger.gamestep = gamestep
@@ -102,7 +102,7 @@ class Base_game:
         return teams
 
 
-    def add_track_record(self, name, status):
+    def add_track_record(self, name, status, team=None):
         """
             Adds and update player track records
 
@@ -113,9 +113,14 @@ class Base_game:
             status : str
                 Status of the player
         """
-        record = list(self.player_results.get(name,[]))
+        tn = self.player_results.get(team,None)
+        logger.error(tn)
+        if not tn:
+            self.player_results.update({team: {}})
+        logger.error(self.player_results)
+        record = list(self.player_results[team].get(name,[]))
         record.append(status)
-        self.player_results[name] = record
+        self.player_results[team][name] = record
 
     def dice_roll(self, stats=0):
         """
@@ -135,7 +140,7 @@ class Base_game:
         return roll
 
 
-    def beater_action(self, beaters, active=0):
+    def beater_action(self, beaters, active=0, team=None):
         """
             Performs a standard beater action
 
@@ -152,7 +157,8 @@ class Base_game:
                     one time use modifyer
             active : int
                 Index of Beater taking the turn. leave empty when you only use one beater    
-            
+            Team : str
+                Name of Team
             Returns
             ----------
             dict
@@ -190,11 +196,11 @@ class Base_game:
             gamelogger.gamestep("{}: Fail ".format(name))
             status = 0
         if self.get_metadata:
-            self.add_track_record(name,status)
+            self.add_track_record(name,status, team)
         return game
 
 
-    def chaser_action(self, chasers, active):
+    def chaser_action(self, chasers, active=0, team=None):
         """
             Performs a standard Chaser action
 
@@ -248,11 +254,11 @@ class Base_game:
             gamelogger.gamestep("{}: Fail".format(chasers[active].get("Name", "Chaser" + str(active))))
             status = 0
         if self.get_metadata:
-            self.add_track_record(name,status)
+            self.add_track_record(name, status, team)
         return game
 
 
-    def keeper_action(self, keeper):
+    def keeper_action(self, keeper, team=None):
         """
             Performs a standard Keeper action
 
@@ -299,11 +305,11 @@ class Base_game:
             gamelogger.gamestep("{}: Fail".format(keeper.get("Name","Keeper")))
             status = 0
         if self.get_metadata:
-            self.add_track_record(name,status)
+            self.add_track_record(name, status, team)
         return game
 
 
-    def seeker_action(self, seeker):
+    def seeker_action(self, seeker, team=None):
         """
             Performs a standard Seeker action
 
@@ -359,7 +365,7 @@ class Base_game:
             gamelogger.gamestep("{}: Fail".format(name))
             status = 0
         if self.get_metadata:
-            self.add_track_record(name,status)
+            self.add_track_record(name, status, team)
         return game
 
 
@@ -474,14 +480,14 @@ class Base_game:
             # Chaser Actions
             # first team Chaser
             gamelogger.gamestep("{} Chaser".format(team_1_name))
-            action_results = self.chaser_action(self.teams[start_i]["Chaser"], self.next_chaser[start_i])
+            action_results = self.chaser_action(self.teams[start_i]["Chaser"], self.next_chaser[start_i], team=team_1_name)
             self.score[start_i] += action_results ["own"]
             self.score[last_i] += action_results["other"]
             if not single_roles:
                 self.next_chaser[start_i] = (self.next_chaser[start_i] + 1) % len(self.teams[start_i]["Chaser"])
             # second team Chaser
             gamelogger.gamestep("{} Chaser".format(team_2_name))
-            action_results = self.chaser_action(self.teams[last_i]["Chaser"], self.next_chaser[last_i])
+            action_results = self.chaser_action(self.teams[last_i]["Chaser"], self.next_chaser[last_i], team=team_2_name) 
             self.score[last_i] += action_results["own"]
             self.score[start_i] += action_results["other"]
             if not single_roles:
@@ -489,14 +495,14 @@ class Base_game:
             # Beater Actions
             # first team Beater
             gamelogger.gamestep("{} Beater".format(team_1_name))
-            action_results = self.beater_action(self.teams[start_i]["Beater"], self.next_beater[start_i])
+            action_results = self.beater_action(self.teams[start_i]["Beater"], self.next_beater[start_i], team=team_1_name)
             self.score[start_i] += action_results["own"]
             self.score[last_i] += action_results["other"]
             if not single_roles:
                 self.next_beater[start_i] = (self.next_beater[start_i] + 1) % len(self.teams[start_i]["Beater"])
             # second team Beater
             gamelogger.gamestep("{} Beater".format(team_2_name))
-            action_results = self.beater_action(self.teams[last_i]["Beater"],self.next_beater[last_i])
+            action_results = self.beater_action(self.teams[last_i]["Beater"],self.next_beater[last_i], team=team_2_name)
             self.score[last_i] += action_results["own"]
             self.score[start_i] += action_results["other"]
             if not single_roles:
@@ -504,18 +510,18 @@ class Base_game:
             # Keeper Actions
             # first team Keeper
             gamelogger.gamestep("{} Keeper".format(team_1_name))
-            action_results = self.keeper_action(self.teams[start_i]["Keeper"])
+            action_results = self.keeper_action(self.teams[start_i]["Keeper"], team=team_1_name)
             self.score[start_i] += action_results["own"]
             self.score[last_i] += action_results["other"]
             # second team Keeper
             gamelogger.gamestep("{} Keeper".format(team_2_name))
-            action_results = self.keeper_action(self.teams[last_i]["Keeper"])
+            action_results = self.keeper_action(self.teams[last_i]["Keeper"], team=team_2_name)
             self.score[last_i] += action_results["own"]
             self.score[start_i] += action_results["other"]
             # Seeker Actions
             # first team Seeker
             gamelogger.gamestep("{} Seeker".format(team_1_name))
-            action_results = self.seeker_action(self.teams[start_i]["Seeker"])
+            action_results = self.seeker_action(self.teams[start_i]["Seeker"], team=team_1_name)
             if action_results["snitch"]:
                 # check if snitch was cought
                 self.snitch = True
@@ -529,7 +535,7 @@ class Base_game:
                 self.teams[start_i]["Seeker"]["streak"] = action_results["streak"]
             # second team Seeker
             gamelogger.gamestep("{} Seeker".format(team_2_name))
-            action_results = self.seeker_action(self.teams[last_i]["Seeker"])
+            action_results = self.seeker_action(self.teams[last_i]["Seeker"], team=team_2_name)
             if action_results["snitch"]:
                 self.snitch = True
                 self.score[last_i] += 150
@@ -551,7 +557,7 @@ class Base_game:
             self.teams[0]["Name"]: self.score[0],
             self.teams[1]["Name"]: self.score[1]
         }
-        self.game_results= {
+        self.game_results = {
             "ending_team": self.ending_team,
             "game_turns": self.game_turns,
             "score": scores,
