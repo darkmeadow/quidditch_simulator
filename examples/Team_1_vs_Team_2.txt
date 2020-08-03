@@ -1,23 +1,23 @@
 Bad weather conditions
-the Home Team Starts
+the Home Team Team_1 Starts
 
 Team_1 Chaser
-Chaser0: Partial Success
-Team_2 Chaser
 Chaser0: Fail
+Team_2 Chaser
+Chaser0: Partial Success
 Team_1 Beater
-Beater0: Fail 
-Team_2 Beater
 Beater0: Partial Success
+Team_2 Beater
+Beater0: Fail 
 Team_1 Keeper
 Keeper: Partial Success
 Team_2 Keeper
 Keeper: Success
 Team_1 Seeker
-Seeker: Success
-current streak bonus 2
-Team_2 Seeker
 Seeker: Fail
+Team_2 Seeker
+Seeker: Partial Success
+current streak bonus 1
 
 Round 1 Score Summary
 Team_1: 10 - Team_2: 20
@@ -25,149 +25,45 @@ Team_1: 10 - Team_2: 20
 Team_1 Chaser
 Chaser1: Partial Success
 Team_2 Chaser
-Chaser1: Partial Success
+Chaser1: Fail
 Team_1 Beater
-Beater1: Fail 
+Beater1: Partial Success
 Team_2 Beater
-Beater1: Fail 
+Beater1: Success 
 Team_1 Keeper
 Keeper: Fail
 Team_2 Keeper
 Keeper: Success
 Team_1 Seeker
+Seeker: Fail
+Team_2 Seeker
 Seeker: Partial Success
-current streak bonus 3
-Team_2 Seeker
-Seeker: Fail
-
-Round 2 Score Summary
-Team_1: 20 - Team_2: 60
-
-Team_1 Chaser
-Chaser2: Fail
-Team_2 Chaser
-Chaser2: Fail
-Team_1 Beater
-Beater0: Partial Success
-Team_2 Beater
-Beater0: Fail 
-Team_1 Keeper
-Keeper: Success
-Team_2 Keeper
-Keeper: Partial Success
-Team_1 Seeker
-Seeker: Success
-current streak bonus 5
-Team_2 Seeker
-Seeker: Fail
-
-Round 3 Score Summary
-Team_1: 50 - Team_2: 60
-
-Team_1 Chaser
-Chaser0: Partial Success
-Team_2 Chaser
-Chaser0: Partial Success
-Team_1 Beater
-Beater1: Fail 
-Team_2 Beater
-Beater1: Fail 
-Team_1 Keeper
-Keeper: Fail
-Team_2 Keeper
-Keeper: Partial Success
-Team_1 Seeker
-Seeker: Partial Success
-current streak bonus 6
-Team_2 Seeker
-Seeker: Fail
-
-Round 4 Score Summary
-Team_1: 60 - Team_2: 90
-
-Team_1 Chaser
-Chaser1: Fail
-Team_2 Chaser
-Chaser1: Fail
-Team_1 Beater
-Beater0: Partial Success
-Team_2 Beater
-Beater0: Fail 
-Team_1 Keeper
-Keeper: Partial Success
-Team_2 Keeper
-Keeper: Fail
-Team_1 Seeker
-Seeker cought the Snitch!
-
-Team_1 ended the Game!
-Final Score:
-Team_1 250 - Team_2 90
-Bad weather conditions
-the Home Team Team_1 Starts
-
-Team_1 Chaser
-Chaser0: Partial Success
-Team_2 Chaser
-Chaser0: Partial Success
-Team_1 Beater
-Beater0: Fail 
-Team_2 Beater
-Beater0: Partial Success
-Team_1 Keeper
-Keeper: Fail
-Team_2 Keeper
-Keeper: Fail
-Team_1 Seeker
-Seeker: Fail
-Team_2 Seeker
-Seeker: Fail
-
-Round 1 Score Summary
-Team_1: 20 - Team_2: 40
-
-Team_1 Chaser
-Chaser1: Partial Success
-Team_2 Chaser
-Chaser1: Partial Success
-Team_1 Beater
-Beater1: Fail 
-Team_2 Beater
-Beater1: Fail 
-Team_1 Keeper
-Keeper: Partial Success
-Team_2 Keeper
-Keeper: Fail
-Team_1 Seeker
-Seeker: Fail
-Team_2 Seeker
-Seeker: Success
 current streak bonus 2
 
 Round 2 Score Summary
-Team_1: 50 - Team_2: 50
+Team_1: 20 - Team_2: 50
 
 Team_1 Chaser
 Chaser2: Fail
 Team_2 Chaser
 Chaser2: Fail
 Team_1 Beater
-Beater0: Partial Success
+Beater0: Success 
 Team_2 Beater
 Beater0: Fail 
 Team_1 Keeper
-Keeper: Success
+Keeper: Partial Success
 Team_2 Keeper
 Keeper: Fail
 Team_1 Seeker
-Seeker: Success
-current streak bonus 2
+Seeker: Partial Success
+current streak bonus 1
 Team_2 Seeker
 Seeker: Partial Success
 current streak bonus 3
 
 Round 3 Score Summary
-Team_1: 100 - Team_2: 50
+Team_1: 60 - Team_2: 40
 
 Team_1 Chaser
 Chaser0: Fail
@@ -176,36 +72,78 @@ Chaser0: Partial Success
 Team_1 Beater
 Beater1: Fail 
 Team_2 Beater
-Beater1: Fail 
+Beater1: Partial Success
 Team_1 Keeper
-Keeper: Partial Success
+Keeper: Fail
 Team_2 Keeper
-Keeper: Success
+Keeper: Fail
 Team_1 Seeker
-Seeker: Success
-current streak bonus 4
+Seeker: Partial Success
+current streak bonus 2
 Team_2 Seeker
-Seeker: Success
-current streak bonus 5
+Seeker: Fail
 
 Round 4 Score Summary
-Team_1: 100 - Team_2: 80
+Team_1: 70 - Team_2: 90
 
 Team_1 Chaser
 Chaser1: Fail
 Team_2 Chaser
-Chaser1: Fail
+Chaser1: Partial Success
 Team_1 Beater
+Beater0: Fail 
+Team_2 Beater
 Beater0: Partial Success
+Team_1 Keeper
+Keeper: Fail
+Team_2 Keeper
+Keeper: Fail
+Team_1 Seeker
+Seeker: Success
+current streak bonus 4
+Team_2 Seeker
+Seeker: Fail
+
+Round 5 Score Summary
+Team_1: 80 - Team_2: 140
+
+Team_1 Chaser
+Chaser2: Fail
+Team_2 Chaser
+Chaser2: Fail
+Team_1 Beater
+Beater1: Partial Success
+Team_2 Beater
+Beater1: Fail 
+Team_1 Keeper
+Keeper: Partial Success
+Team_2 Keeper
+Keeper: Fail
+Team_1 Seeker
+Seeker: Success
+current streak bonus 6
+Team_2 Seeker
+Seeker: Partial Success
+current streak bonus 1
+
+Round 6 Score Summary
+Team_1: 120 - Team_2: 140
+
+Team_1 Chaser
+Chaser0: Fail
+Team_2 Chaser
+Chaser0: Partial Success
+Team_1 Beater
+Beater0: Fail 
 Team_2 Beater
 Beater0: Fail 
 Team_1 Keeper
 Keeper: Fail
 Team_2 Keeper
-Keeper: Fail
+Keeper: Partial Success
 Team_1 Seeker
 Seeker cought the Snitch!
 
 Team_1 ended the Game!
 Final Score:
-Team_1 290 - Team_2 100
+Team_1 270 - Team_2 180

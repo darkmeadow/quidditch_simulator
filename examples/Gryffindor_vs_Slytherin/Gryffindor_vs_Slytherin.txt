@@ -87,3 +87,91 @@ Dingo Fiddlewood cought the Snitch!
 Slytherin ended the Game!
 Final Score:
 Gryffindor 80 - Slytherin 200
+Bad weather conditions
+the Guest Team Slytherin Starts
+
+Slytherin Chaser
+Gorge Clockwork: Fail
+Gryffindor Chaser
+Tomas Striker: Partial Success
+Slytherin Beater
+Hawk Newts: Fail 
+Gryffindor Beater
+Egbert Rubble: Fail 
+Slytherin Keeper
+Carson Crane: Fail
+Gryffindor Keeper
+Cove Mandrake: Fail
+Slytherin Seeker
+Dingo Fiddlewood: Fail
+Gryffindor Seeker
+Indigo Dogbane: Fail
+
+Round 1 Score Summary
+Gryffindor: 40 - Slytherin: 20
+
+Slytherin Chaser
+Cicero Fern: Fail
+Gryffindor Chaser
+Tim Butters: Partial Success
+Slytherin Beater
+Steel Buckthorn: Partial Success
+Gryffindor Beater
+Lacy Rabbot: Fail 
+Slytherin Keeper
+Carson Crane: Partial Success
+Gryffindor Keeper
+Cove Mandrake: Fail
+Slytherin Seeker
+Dingo Fiddlewood: Partial Success
+current streak bonus 1
+Gryffindor Seeker
+Indigo Dogbane: Partial Success
+current streak bonus 1
+
+Round 2 Score Summary
+Gryffindor: 50 - Slytherin: 50
+
+Slytherin Chaser
+Lonnie Hawks: Success
+Gryffindor Chaser
+Kenneth Prott: Fail
+Slytherin Beater
+Hawk Newts: Partial Success
+Gryffindor Beater
+Egbert Rubble: Fail 
+Slytherin Keeper
+Carson Crane: Success
+Gryffindor Keeper
+Cove Mandrake: Fail
+Slytherin Seeker
+Dingo Fiddlewood: Success
+current streak bonus 3
+Gryffindor Seeker
+Indigo Dogbane: Success
+current streak bonus 3
+
+Round 3 Score Summary
+Gryffindor: 40 - Slytherin: 120
+
+Slytherin Chaser
+Gorge Clockwork: Partial Success
+Gryffindor Chaser
+Tomas Striker: Partial Success
+Slytherin Beater
+Steel Buckthorn: Partial Success
+Gryffindor Beater
+Lacy Rabbot: Fail 
+Slytherin Keeper
+Carson Crane: Success
+Gryffindor Keeper
+Cove Mandrake: Partial Success
+Slytherin Seeker
+Dingo Fiddlewood: Success
+current streak bonus 5
+Gryffindor Seeker
+Indigo Dogbane cought the Snitch!
+
+Gryffindor ended the Game!
+Final Score:
+Gryffindor 190 - Slytherin 150
