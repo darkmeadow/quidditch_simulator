@@ -569,7 +569,7 @@ class Base_game:
         # send basic info to logger
         logger.info("\nMatch Finished after {} turns".format(self.game_turns))
         logger.info("{} ended the Match".format(self.ending_team))
-        logger.info("Final Score: {} -{}".format(self.score[0],self.score[1]))
+        logger.info("Final Score: {} - {}".format(self.score[0],self.score[1]))
         # send in depth info to game logger
         gamelogger.gamestep("\n{} ended the Game!".format(self.ending_team))
         gamelogger.gamestep("Final Score:")
