@@ -20,7 +20,7 @@ Clone repository or download files into local working directory.
 create a Match json file containing two team jsons as a list
 
 + Create and open a new .json file
-+ Add two teams (see [Example_team.json](/examples/Example_team.json) into the file in list format
++ Add two teams (see [Example_team.json](/examples/Example_team.json)) into the file in list format
 ```json
 [{"Name": "TeamName", ...}, {"Name": "Teamname", ...}]
 ```
