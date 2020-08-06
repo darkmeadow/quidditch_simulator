@@ -5,6 +5,7 @@
 - [Player](#Player_object)
 - [Team](#Team_object)
 - [Match](#Match_object)
+- [Result](#Result_object) 
 
 ## Player_Object
 
@@ -78,7 +79,7 @@ The match object is a simple Json object list containing 2 Team objects
 ]
 ```
 
-## Result Object:
+## Result_object:
 
 The result object is a json containg following information:
 
