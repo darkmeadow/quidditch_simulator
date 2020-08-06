@@ -68,12 +68,72 @@ The match object is a simple Json object list containing 2 Team objects
 ```
 [
     {
-        "Name": "SomeName",
+        "Name": "SomeTeamName",
         ...
     },
     {
-        "Name": "SomeOtherName",
+        "Name": "SomeOtherTeamName",
         ...
     }
 ]
 ```
+
+## Result Object:
+
+The result object is a json containg following information:
+
+```json
+{
+    "ending_team": "[TEAMNAME]",
+    "game_turns": 5,
+    "score": {
+        "[TEAMNAME_HOME]": 123,
+        "[TEAMNAME_GUEST]": 123,
+    },
+    "start_team": "[TEAMNAME]",
+    "weather": 0
+}
+```
+#### variable Reference:
++ ending_team: Name of the team whos Seeker cought the snitch
+
++ game_turns: Number of full game turns whith each two Chaser, Beater, Keeper and seeker actions.
+
++ score: Final Match scores.
+
++ start_team: Name of team starting each game turn (won the initiative roll in the beginning of the match)
+
++ weather: global weather modifyer for the game, usually ranges between -2 and 0
+
+
+### Optional player_results
+
+when metadata is collected a additional player_results object, that includes number indication on how succesfull they were each game turn (first to last action) will be included:
+
+```json
+{
+    "player_results": {
+        "[SOMETEAMNAME]": {
+            "[PLAYERNAME|POSITION123]" : [
+                0|1|2|3,
+                0|1|2|3,
+                0|1|2|3
+            ],
+            "[PLAYERNAME|POSITION123]": []
+        },
+        "[SOMEOTHERTEAMNAME]": {
+            "[PLAYERNAME|POSITION123]" : [
+                0|1|2|3,
+                0|1|2|3,
+                0|1|2|3
+            ],
+            "[PLAYERNAME|POSITION123]": []
+        }
+    }
+}
+```
+#### Number reference:
++ 0 = Failure (rolled < 6)
++ 1 = Partial Success (rolled 7 - 9)
++ 2 = Success (rolled 10+, excluding seeker results with 15+)
++ 3 = Cought Snitch (Seeker rolled 15+)
