@@ -841,10 +841,9 @@ class Modified_Game(Base_game):
                 result_2 = self.beater_target_seeker(self.teams[self.start_i]["Beater"], self.next_beater[self.start_i], team=self.team_1_name)
                 self.teams[self.last_i]["Seeker"]["temp"] += result_1["own"]
                 self.teams[self.start_i]["Seeker"]["temp"] += result_1["other"]
-                logger.error(self.teams[self.start_i]["Seeker"])
-                logger.error(self.teams[self.last_i]["Seeker"])
-                result_1["own"] = 0
-                result_1["other"] = result_1["other_points"]
+                result_2["own"] = 0
+                logger.error(result_2)
+                result_2["other"] = result_1["other_points"]
                 # reduce chance to target seeker again
                 self.seeker_target[self.start_i] += 2
             else:
@@ -853,8 +852,6 @@ class Modified_Game(Base_game):
                 if self.seeker_target[self.start_i] > 0:
                     self.seeker_target[self.start_i] -= 1
             if not single_roles:
-                logger.error(result_1)
-                logger.error(result_2)
                 self.next_beater[self.last_i] = (self.next_beater[self.last_i] + 1) % len(self.teams[self.last_i]["Beater"])
             score_change = [result_1["own"] + result_2["other"], result_1["other"] + result_2["own"]]
             self.score[self.start_i] += score_change[0]
