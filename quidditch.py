@@ -33,6 +33,7 @@ def gamestep(self, message, *args, **kws):
             # Yes, logger takes its '*args' as 'args'.
             self._log(15, message, args, **kws)
 
+
 def add_game_logging():
     """
         Adds Custom gamestep loglevel and attaches logfunction to logging facility
@@ -68,6 +69,10 @@ class Base_game:
     ending_team = None
     player_results = {}
 
+    # logging
+    gamelogger = None
+    gamehandler = None
+
     def __init__(self, name, team_file=None):
         """
             Initiates Base Game quidditch class
@@ -81,6 +86,8 @@ class Base_game:
         """
         self.name = name
         add_game_logging()
+        self.gamelogger = logging.getLogger("GameLogger")
+        self.gamelogger.setLevel(15)
         if team_file:
             self.load_teams(team_file)
 
@@ -185,17 +192,17 @@ class Base_game:
             # on success
             game["own"] += 10
             game["other"] -= 10
-            gamelogger.gamestep("{}: Success ".format(name))
+            self.gamelogger.gamestep("{}: Success ".format(name))
             status = 2
         elif roll >= 7:
             # on partial success
             game["own"] += 10
-            gamelogger.gamestep("{}: Partial Success".format(name))
+            self.gamelogger.gamestep("{}: Partial Success".format(name))
             status = 1
         else:
             # on fail
             game["other"]  += 10
-            gamelogger.gamestep("{}: Fail ".format(name))
+            self.gamelogger.gamestep("{}: Fail ".format(name))
             status = 0
         if self.get_metadata:
             self.add_track_record(name,status, team)
@@ -243,17 +250,17 @@ class Base_game:
         if roll >= 10:
             # on success
             game["own"] +=20
-            gamelogger.gamestep("{}: Success".format(chasers[active].get("Name", "Chaser" + str(active))))
+            self.gamelogger.gamestep("{}: Success".format(chasers[active].get("Name", "Chaser" + str(active))))
             status = 2
         elif roll >= 7:
             # on partial success
             game["own"] += 10
-            gamelogger.gamestep("{}: Partial Success".format(chasers[active].get("Name", "Chaser" + str(active))))
+            self.gamelogger.gamestep("{}: Partial Success".format(chasers[active].get("Name", "Chaser" + str(active))))
             status = 1
         else:
             # on fail
             game["other"] += 10
-            gamelogger.gamestep("{}: Fail".format(chasers[active].get("Name", "Chaser" + str(active))))
+            self.gamelogger.gamestep("{}: Fail".format(chasers[active].get("Name", "Chaser" + str(active))))
             status = 0
         if self.get_metadata:
             self.add_track_record(name, status, team)
@@ -296,15 +303,15 @@ class Base_game:
         if roll >= 10:
             game["own"] += 10
             game["other"] -= 10
-            gamelogger.gamestep("{}: Success".format(name))
+            self.gamelogger.gamestep("{}: Success".format(name))
             status = 2
         elif roll >= 7:
             game["other"] -= 10
-            gamelogger.gamestep("{}: Partial Success".format(keeper.get("Name","Keeper")))
+            self.gamelogger.gamestep("{}: Partial Success".format(keeper.get("Name","Keeper")))
             status = 1
         else:
             game["other"] += 10
-            gamelogger.gamestep("{}: Fail".format(keeper.get("Name","Keeper")))
+            self.gamelogger.gamestep("{}: Fail".format(keeper.get("Name","Keeper")))
             status = 0
         if self.get_metadata:
             self.add_track_record(name, status, team)
@@ -350,21 +357,21 @@ class Base_game:
         status = None
         if roll >= 15:
             game["snitch"] = True
-            gamelogger.gamestep("{} cought the Snitch!".format(seeker.get("Name","Seeker")))
+            self.gamelogger.gamestep("{} cought the Snitch!".format(seeker.get("Name","Seeker")))
             status = 3
         elif roll >= 10:
             game["streak"] += 2
-            gamelogger.gamestep("{}: Success".format(seeker.get("Name","Seeker")))
-            gamelogger.gamestep("current streak bonus {}".format(game["streak"]))
+            self.gamelogger.gamestep("{}: Success".format(seeker.get("Name","Seeker")))
+            self.gamelogger.gamestep("current streak bonus {}".format(game["streak"]))
             status = 2
         elif roll >= 7:
             game["streak"] += 1
-            gamelogger.gamestep("{}: Partial Success".format(seeker.get("Name","Seeker")))
-            gamelogger.gamestep("current streak bonus {}".format(game["streak"]))
+            self.gamelogger.gamestep("{}: Partial Success".format(seeker.get("Name","Seeker")))
+            self.gamelogger.gamestep("current streak bonus {}".format(game["streak"]))
             status = 1
         else:
             game["streak"] = -2
-            gamelogger.gamestep("{}: Fail".format(name))
+            self.gamelogger.gamestep("{}: Fail".format(name))
             status = 0
         if self.get_metadata:
             self.add_track_record(name, status, team)
@@ -394,27 +401,26 @@ class Base_game:
         """
         if use_weather:
             conditions = self.dice_roll()
-            if conditions <= 6:
-                self.weather = -2
-                gamelogger.gamestep("Really bad weather conditions")
-            elif conditions <= 9:
-                self.weather -= 1
-                gamelogger.gamestep("Bad weather conditions")
+            if conditions <= 7:
+                self.weather = -1
+                self.gamelogger.gamestep("Bad weather conditions")
             else:
-                gamelogger.gamestep("Good weather conditions")
+                self.gamelogger.gamestep("Good weather conditions")
+        random.seed()
+        self.game_results = {}
+        self.score = [0,0]
         # decide witch team starts the match
         team1 = 0
         team2 = 0
-
         while team1 == team2:
             team1 = self.dice_roll()
             team2 = self.dice_roll()
         if team1 > team2:
             self.start_i = 0
-            gamelogger.gamestep("the Home Team {} Starts\n".format(self.teams[0]["Name"]))
+            self.gamelogger.gamestep("the Home Team {} Starts\n".format(self.teams[0]["Name"]))
         else:
             self.start_i = 1
-            gamelogger.gamestep("the Guest Team {} Starts\n".format(self.teams[1]["Name"]))
+            self.gamelogger.gamestep("the Guest Team {} Starts\n".format(self.teams[1]["Name"]))
         # calculate index of second team
         self.last_i = (self.start_i + 1) % 2
         # fetch team Names for quick access
@@ -459,12 +465,12 @@ class Base_game:
             result_1 = {}
             result_2 = {}
             # first team Chaser
-            gamelogger.gamestep("{} Chaser".format(self.team_1_name))
+            self.gamelogger.gamestep("{} Chaser".format(self.team_1_name))
             result_1 = self.chaser_action(self.teams[self.start_i]["Chaser"], self.next_chaser[self.start_i], team=self.team_1_name)
             if not single_roles:
                 self.next_chaser[self.start_i] = (self.next_chaser[self.start_i] + 1) % len(self.teams[self.start_i]["Chaser"])
             # second team Chaser
-            gamelogger.gamestep("{} Chaser".format(self.team_2_name))
+            self.gamelogger.gamestep("{} Chaser".format(self.team_2_name))
             result_2 = self.chaser_action(self.teams[self.last_i]["Chaser"], self.next_chaser[self.last_i], team=self.team_2_name) 
             if not single_roles:
                 self.next_chaser[self.last_i] = (self.next_chaser[self.last_i] + 1) % len(self.teams[self.last_i]["Chaser"])
@@ -505,12 +511,12 @@ class Base_game:
             result_1 = {}
             result_2 = {}
             # first team Beater
-            gamelogger.gamestep("{} Beater".format(self.team_1_name))
+            self.gamelogger.gamestep("{} Beater".format(self.team_1_name))
             result_1 = self.beater_action(self.teams[self.start_i]["Beater"], self.next_beater[self.start_i], team=self.team_1_name)
             if not single_roles:
                 self.next_beater[self.start_i] = (self.next_beater[self.start_i] + 1) % len(self.teams[self.start_i]["Beater"])
             # second team Beater
-            gamelogger.gamestep("{} Beater".format(self.team_2_name))
+            self.gamelogger.gamestep("{} Beater".format(self.team_2_name))
             result_2 = self.beater_action(self.teams[self.last_i]["Beater"], self.next_beater[self.last_i], team=self.team_2_name) 
             if not single_roles:
                 self.next_beater[self.last_i] = (self.next_beater[self.last_i] + 1) % len(self.teams[self.last_i]["Beater"])
@@ -541,10 +547,10 @@ class Base_game:
         score_change = [0,0]
         result_1 = {}
         result_2 = {}
-        gamelogger.gamestep("{} Keeper".format(self.team_1_name))
+        self.gamelogger.gamestep("{} Keeper".format(self.team_1_name))
         result_1 = self.keeper_action(self.teams[self.start_i]["Keeper"], team=self.team_1_name)
         # second team Keeper
-        gamelogger.gamestep("{} Keeper".format(self.team_2_name))
+        self.gamelogger.gamestep("{} Keeper".format(self.team_2_name))
         result_2 = self.keeper_action(self.teams[self.last_i]["Keeper"], team=self.team_2_name)
         score_change = [result_1["own"] + result_2["other"], result_1["other"] + result_2["own"]]
         self.score[self.start_i] += score_change[0]
@@ -574,7 +580,7 @@ class Base_game:
         result_1 = {}
         result_2 = {}
         # first team Seeker
-        gamelogger.gamestep("{} Seeker".format(self.team_1_name))
+        self.gamelogger.gamestep("{} Seeker".format(self.team_1_name))
         result_1 = self.seeker_action(self.teams[self.start_i]["Seeker"], team=self.team_1_name)
         self.teams[self.start_i]["Seeker"]["temp"]
         if result_1["snitch"]:
@@ -591,7 +597,7 @@ class Base_game:
             self.teams[self.start_i]["Seeker"]["streak"] = result_1["streak"]
         # second team Seeker
         if not self.snitch:
-            gamelogger.gamestep("{} Seeker".format(self.team_2_name))
+            self.gamelogger.gamestep("{} Seeker".format(self.team_2_name))
             result_2 = self.seeker_action(self.teams[self.last_i]["Seeker"], team=self.team_2_name)
             self.teams[self.last_i]["Seeker"]["temp"] = 0
             if result_2["snitch"]:
@@ -665,9 +671,8 @@ class Base_game:
             # ensure no team is below 0 points
             self.score = [max(i,0) for i in self.score]
             # end of round logs
-            gamelogger.gamestep("\nRound {} Score Summary".format(self.game_turns))
-            gamelogger.gamestep("{}: {} - {}: {}\n".format(self.teams[0]["Name"], self.score[0], self.teams[1]["Name"], self.score[1]))
-            logger.info("Turn {} Score: {} - {}".format(self.game_turns, self.score[0], self.score[1]))
+            self.gamelogger.gamestep("\nRound {} Score Summary".format(self.game_turns))
+            self.gamelogger.gamestep("{}: {} - {}: {}\n".format(self.teams[0]["Name"], self.score[0], self.teams[1]["Name"], self.score[1]))
         # Post Game 
         # verbose Scores
         scores = {
@@ -687,13 +692,12 @@ class Base_game:
         
         # send basic info to default logger
         logger.info("\nMatch Finished after {} turns".format(self.game_turns))
-        logger.info("{} ended the Match".format(self.ending_team))
         logger.info("Final Score: {} - {}".format(self.score[0],self.score[1]))
 
         # send in depth info to game logger
-        gamelogger.gamestep("\n{} ended the Game!".format(self.ending_team))
-        gamelogger.gamestep("Final Score:")
-        gamelogger.gamestep("{} {} - {} {}".format(self.teams[0]["Name"], self.score[0], self.teams[1]["Name"], self.score[1]))
+        self.gamelogger.gamestep("\n{} ended the Game!".format(self.ending_team))
+        self.gamelogger.gamestep("Final Score:")
+        self.gamelogger.gamestep("{} {} - {} {}".format(self.teams[0]["Name"], self.score[0], self.teams[1]["Name"], self.score[1]))
         self.score = scores
         return self.game_results
 
@@ -765,13 +769,13 @@ class Modified_Game(Base_game):
         # relative score changes
         game = {"own": 0, "other": 0, "other_points": 10}
         status = None
-        gamelogger.gamestep("{} targets enemy Seeker".format(name))
-        gamelogger.gamestep("A enemy chaser slip through and scores!")
+        self.gamelogger.gamestep("{} targets enemy Seeker".format(name))
+        self.gamelogger.gamestep("A enemy chaser slip through and scores!")
         if roll >= 10:
             game["other"] = -2
             status = 2
-            gamelogger.gamestep("{}: Success.")
-            gamelogger.gamestep("A Nasty Hit")
+            self.gamelogger.gamestep("{}: Success.")
+            self.gamelogger.gamestep("A Nasty Hit")
         elif roll >= 7:
             game["other"] = -1
             status = 1
@@ -802,6 +806,7 @@ class Modified_Game(Base_game):
                 List with relative score changes ordered start team -> second team
         """
         score_change = [0,0]
+        target_mod = 3
         # when all player should be used invoke function recurively
         if use_all:
             for index in self.teams[self.start_i]["Beater"]:
@@ -814,17 +819,14 @@ class Modified_Game(Base_game):
             result_1 = {}
             result_2 = {}
             # first team Beater
-            gamelogger.gamestep("{} Beater".format(self.team_1_name))
+            self.gamelogger.gamestep("{} Beater".format(self.team_1_name))
             # check if beater targets seeker instead of normal action
-            if self.sum_modifyer(self.teams[self.last_i]["Seeker"]) >= 4:
-                # and self.dice_roll() > 5 + self.seeker_target[self.last_i]
+            if self.sum_modifyer(self.teams[self.last_i]["Seeker"]) >= target_mod and self.dice_roll(stats=-self.seeker_target[self.last_i]) > 6:
                 result_1 = self.beater_target_seeker(self.teams[self.start_i]["Beater"], self.next_beater[self.start_i], team=self.team_1_name)
                 self.teams[self.start_i]["Seeker"]["temp"] += result_1["own"]
                 self.teams[self.last_i]["Seeker"]["temp"] += result_1["other"]
                 result_1["own"] = 0
                 result_1["other"] = result_1["other_points"]
-                logger.error(self.teams[self.start_i]["Seeker"])
-                logger.error(self.teams[self.last_i]["Seeker"])
                 # reduce chance to target seeker again
                 self.seeker_target[self.last_i] += 2
             else:
@@ -835,15 +837,14 @@ class Modified_Game(Base_game):
             if not single_roles:
                 self.next_beater[self.start_i] = (self.next_beater[self.start_i] + 1) % len(self.teams[self.start_i]["Beater"])
             # second team Beater
-            gamelogger.gamestep("{} Beater".format(self.team_2_name))
+            self.gamelogger.gamestep("{} Beater".format(self.team_2_name))
             # check if beater targets seeker instead of normal action
-            if self.sum_modifyer(self.teams[self.start_i]["Seeker"]) >= 4:
+            if self.sum_modifyer(self.teams[self.start_i]["Seeker"]) >= target_mod and self.dice_roll(stats=-self.seeker_target[self.start_i]) > 6:
                 result_2 = self.beater_target_seeker(self.teams[self.start_i]["Beater"], self.next_beater[self.start_i], team=self.team_1_name)
-                self.teams[self.last_i]["Seeker"]["temp"] += result_1["own"]
-                self.teams[self.start_i]["Seeker"]["temp"] += result_1["other"]
+                self.teams[self.last_i]["Seeker"]["temp"] += result_2["own"]
+                self.teams[self.start_i]["Seeker"]["temp"] += result_2["other"]
                 result_2["own"] = 0
-                logger.error(result_2)
-                result_2["other"] = result_1["other_points"]
+                result_2["other"] = result_2["other_points"]
                 # reduce chance to target seeker again
                 self.seeker_target[self.start_i] += 2
             else:
@@ -876,13 +877,13 @@ if __name__ == "__main__":
 
         # setup logging parameter
         add_game_logging()
-        gamelogger = logging.getLogger("GameLogger")
-        gamelogger.setLevel(15)
+        game.gamelogger = logging.getLogger("GameLogger")
+        game.gamelogger.setLevel(15)
         if args.collect_metadata:
             # setup log file handler
             game.get_metadata = args.collect_metadata
             gamehandler = logging.FileHandler("{}.txt".format(game.name))
-            gamelogger.addHandler(gamehandler)
+            game.gamelogger.addHandler(gamehandler)
         # run game
         result = game.run_game(single_roles=args.single_roles, use_weather=args.use_weather)
         # dump result into file
